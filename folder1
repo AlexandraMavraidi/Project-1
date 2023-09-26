@@ -1,0 +1,70 @@
+`with classes_by_user as
+(select user_id
+        , date_trunc ('day', class_start_datetime) as date_classes
+        , count(id_class) over (partition by class_start_datetime order by user_id) as cnt_classes_by_user
+from skyeng_db.classes
+where class_status in ('success', 'failed_by_student')
+    and class_type <> 'trial'
+order by user_id
+),
+
+transaction_by_user as
+(select distinct date_payment
+        , user_id
+        , max(cnt_classes) over (partition by user_id order by date_payment) as cnt_payments_by_user
+from 
+    (select 
+            user_id
+            , date_trunc ('day', transaction_datetime) as date_payment
+            , sum (classes) over (partition by user_id order by transaction_datetime) as cnt_classes
+    from skyeng_db.payments
+    where status_name = 'success'
+) t
+order by user_id, date_payment
+),
+
+all_date_and_user as
+(select gs::date
+        , user_id
+from generate_series('2016-01-01', '2016-12-31', interval '1 day') as gs
+    cross join (select distinct user_id
+                from skyeng_db.payments
+                where date_trunc ('year', transaction_datetime) = '2016-01-01') users
+order by user_id, gs
+),
+
+all_dates_by_user as
+(
+select gs as date
+    , adau.user_id
+    , coalesce (cnt_classes_by_user, 0) as cnt_classes_by_user
+from all_date_and_user adau
+    left join classes_by_user cu
+     on adau.user_id = cu.user_id
+     and gs = date_classes
+order by user_id, date
+),
+
+all_classes_and_payments_by_user as
+(
+select 
+            adu.user_id
+            , date
+            , max (date_payment) over (partition by adu.user_id order by date) as date_pay
+            , cnt_classes_by_user
+            , cnt_payments_by_user
+            , dense_rank() over (partition by adu.user_id, date order by cnt_payments_by_user desc)
+    from all_dates_by_user as adu 
+        left join transaction_by_user as tu 
+        on adu.user_id = tu.user_id
+            and tu.date_payment <= adu.date
+)
+
+select 
+        user_id
+        , date
+        , sum(cnt_classes_by_user * -1) over (partition by user_id order by date rows between unbounded preceding and current row) + cnt_payments_by_user as balance
+from all_classes_and_payments_by_user
+where dense_rank = 1
+    and date_pay is not null
+`
