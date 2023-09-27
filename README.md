@@ -49,7 +49,7 @@
 
 Для решения поставленных задач мной был написан запрос с использованием PostgreSQL Metabase. В решении я использовала как возможности СТЕ, так и подзапросы. Также был применен функционал join, фильтрация и агрегирование полученных данных с использованием функций. Мной было обнаружено, что некоторые уроки в статусе success имеют отрицательную длительность, а также, что у некоторых студентов имеется отрицательный баланс уроков. Все это является поводом для обращения к дата-инженерам и владельцам таблиц. Также мной была создана визуализация в виде линейного графика для отображения полученных данных.  
 
-  *Ссылка на работу:* [SQL Code](https://github.com/AlexandraMavraidi/Project-1/blob/02da400f6ff3e8eb6399b4ec708897ecd031152f/SQL%20Code)https://github.com/AlexandraMavraidi/Project-1/blob/02da400f6ff3e8eb6399b4ec708897ecd031152f/SQL%20Code  
+  *Ссылка на работу:* [SQL Code](https://github.com/AlexandraMavraidi/Project-1/blob/02da400f6ff3e8eb6399b4ec708897ecd031152f/SQL%20Code)
 
 **Проект 4: Моделирование базы данных и составление дашборда**  
 
@@ -61,5 +61,5 @@
 Решение поставленных задач необходимо было представить в виде кода, написанного в Google Colab посредством SQLLight, а дашборд представить в файле Excel. Для объединения таблиц мной был использован join по ключевым полям каждой таблицы. Для получения количества я использовала функцию count с условием where. Для расчета продажной конверсии мной были использованы функции sum и count с учетом условия where на объединенных таблицах (join). Для расчета средней продолжительности коммуникации я использовала функцию avg с учетом условия where на объединенных таблицах.  
 С помощью функций python я выгрузила объединенные таблицы в CSV файл, совершила преобразование данных с использованием power query. На основе запроса создала несколько сводных таблиц для построения визуализации и объединила их в дашборд.  
 
-  *Ссылка на работу:* [Dashboard.xlsx](https://github.com/AlexandraMavraidi/Project-1/blob/553d8be49172c39f91383f5f1b6265ca19f8eddb/Dashboard.xlsx)https://github.com/AlexandraMavraidi/Project-1/blob/553d8be49172c39f91383f5f1b6265ca19f8eddb/Dashboard.xlsx  
-  [SQLLight](https://github.com/AlexandraMavraidi/Project-1/blob/2fca933a5fe77e37bd6f921796e24cef97770a18/SQLLight)https://github.com/AlexandraMavraidi/Project-1/blob/2fca933a5fe77e37bd6f921796e24cef97770a18/SQLLight
+  *Ссылка на работу:* [Dashboard.xlsx](https://github.com/AlexandraMavraidi/Project-1/blob/553d8be49172c39f91383f5f1b6265ca19f8eddb/Dashboard.xlsx)
+  [SQLLight](https://github.com/AlexandraMavraidi/Project-1/blob/2fca933a5fe77e37bd6f921796e24cef97770a18/SQLLight)
