@@ -1,0 +1,32 @@
+`%%sql
+select *
+from task t
+  join call c on t.task_rk = c.wo_task_rk
+  join action a on c.wo_hit_rk = a.hit_rk
+  join product p on a.hit_rk = p.hit_rk
+  join emp_x_org_gr e on c.wo_employee_rk = e.employee_rk
+  join queue q on c.wo_queue_id = q.queue_id
+  join "group" g on e.org_group_rk = g.org_group_rk
+  join mngmnt m on g.org_management_rk = m.org_management_rk
+  join result r on a.hit_status_result_id = r.hit_status_result_id
+  join horoscope h on c.agent_login = h.agent_login;`  
+
+`%%sql
+-- Задание 2.1.
+ select count(*) as cnt_succes_action
+ from action a
+   join result r on a.hit_status_result_id = r.hit_status_result_id
+ where r.hit_status_result_desc = 'Дозвон, Успешно'
+
+--Задание 2.2.
+select cast (sum(case when r.hit_status_result_desc = 'Дозвон, Успешно' then 1 else 0 end) as real) / count(*) as conversion
+from action a
+   join result r on a.hit_status_result_id = r.hit_status_result_id
+where r.hit_status_result_desc in ('Дозвон, Успешно', 'Дозвон, Отказ')
+
+-- Задание 2.3.
+select avg(duratoin_sec) as avg_duration
+from call c
+  join action a on c.wo_hit_rk = a.hit_rk
+  join result r on a.hit_status_result_id = r.hit_status_result_id
+where r.hit_status_result_desc = 'Дозвон, Успешно'`
